@@ -40,7 +40,7 @@ class commande:
 
 class package:
     
-    def __init__(self,nbpackage: int, products: list, size : int) -> None:
+    def __init__(self,nbpackage: int,id_order : int, products: list, size : int) -> None:
         """Creating an instance of a package
 
         Args:
@@ -53,6 +53,7 @@ class package:
         #[ [Product 1, quantity], [Product 2, quantity] ]
 
         self.nbpackage = nbpackage
+        self.id_order = id_order
         self.productslist = products
         self.size = size
 
@@ -67,10 +68,17 @@ class package:
 
 class product:
     
-    def __init__(self,nbproduct, ended) -> None:
+    def __init__(self,nbproduct :int,product_ref : int, ended : bool) -> None:
         self.nbproduct = nbproduct
         self.is_ended = ended
+        self.product_ref = product_ref
 
     def scan(self):
         #When you scan a product
         self.is_ended =True
+
+    def search_product_ref(self):
+        #SQL request to search the product ref in ProductListed
+        self.price = result[0]
+        self.nom = result[1]
+        self
