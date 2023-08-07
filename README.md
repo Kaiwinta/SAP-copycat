@@ -10,6 +10,8 @@ Requirements:
     -A simple tkinter interface as usual
 
     - Good request
+    - adding an admin mod that help you track what was done
+    - adding some user database and password to acces to admin
 
 
 Challenge:
