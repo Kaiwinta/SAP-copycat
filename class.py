@@ -34,6 +34,14 @@ class commande:
         if len(self.list_packages_left) == 0:
             self.ended = True
 
+    def create_packages(self):
+        """
+            For all packages in listecarton, generate a package class instance
+        """
+        for i in self.listecarton:
+            carton = package(i[0],self.nbcommand, i[1], i[2])
+            carton.generate_product()
+
   
 #Command ==> Many or a single packages 
 #Packages ==> many or a single product
@@ -49,7 +57,7 @@ class package:
             size (int): _description_
         """
 
-        #Structure of product:
+        #Structure of productlist:
         #[ [Product 1, quantity], [Product 2, quantity] ]
 
         self.nbpackage = nbpackage
@@ -61,9 +69,25 @@ class package:
             raise(IndexError('Not enough packages (len(self.productslist) < self.size)'))
 
     def check_len(self):
+        """Check if the number of product is wrong or not
+
+        Returns:
+            bool : Return True if the size is good
+        """
         return self.size == len(self.productslist)
     
-
+    def generate_product(self):
+        """
+            Generate for all product in the product list and instance of a product class
+        """
+        range = 0
+        for i in self.productslist:
+            for y in range(i[1]):
+                #i[1] is the quantity of a product
+                #The neested loop allow us to add many product with the same ref
+                produit = product(range,i[0], False)
+                produit.search_product_ref()
+                range+=1
     
 
 class product:
