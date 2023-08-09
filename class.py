@@ -101,7 +101,12 @@ class product:
         #When you scan a product
         self.is_ended =True
 
-    def search_product_ref(self):
+    def search_product_ref(self,result):
+        """Permet d'avoir des info supplémentaire sur le produit
+
+        Args:
+            result (tuple): the tuple of the result of an sql request
+        """
         #SQL request to search the product ref in ProductListed
         self.price = result[0]
         self.nom = result[1]
