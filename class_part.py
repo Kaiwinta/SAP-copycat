@@ -1,3 +1,5 @@
+import db_to_class as dbtc
+
 class commande:
     
     def __init__(self,nbcommand, client : str, Listcarton : list, Group: int, ended: bool) -> None:
@@ -86,7 +88,6 @@ class package:
                 #i[1] is the quantity of a product
                 #The neested loop allow us to add many product with the same ref
                 produit = product(range,i[0], False)
-                produit.search_product_ref()
                 range+=1
     
 
@@ -96,6 +97,9 @@ class product:
         self.nbproduct = nbproduct
         self.is_ended = ended
         self.product_ref = product_ref
+
+        request_result = dbtc.search_price(self.product_ref)
+        self.search_product_ref(request_result)
 
     def scan(self):
         #When you scan a product
@@ -110,4 +114,4 @@ class product:
         #SQL request to search the product ref in ProductListed
         self.price = result[0]
         self.nom = result[1]
-        self
+    
