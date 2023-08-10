@@ -10,4 +10,6 @@ c = conn.cursor()
 def search_price(ref):
     return c.execute(f"Select *  From Product WHERE product_ref = {ref}")
 
-def 
+def charging_order(order_ref):
+    print('hey')
+    

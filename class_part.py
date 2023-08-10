@@ -11,6 +11,9 @@ class commande:
             Listcarton (list): The list of all the packages that are in this command, allow us to have big command
             Group (int): an int that allow us to separate th e command based on the country
             ended (bool): Just to chack if the command is ended
+
+            #Listecarton muss be written like this:
+            #[ [pack_id], [product1,p2,p3,...], [size] ] ,     [ [pack_id], [product1,p2,p3,...], [size] ]
         """     
         self.listecarton = Listcarton
         self.nbcommand = nbcommand
@@ -18,8 +21,7 @@ class commande:
         self.group = Group
         self.client = client
 
-        for i in self.listecarton:
-            carton = package(i[0],i[1],i[2])
+        self.create_packages()
 
     #Listecarton muss be written like this:
     #[ [pack_id], [product1,p2,p3,...], [size] ] ,     [ [pack_id], [product1,p2,p3,...], [size] ]
@@ -66,6 +68,7 @@ class package:
         self.id_order = id_order            #Id of the order that contain the package
         self.product_ref_list = products    #List of all the ref of the product and the quantity
         self.size = size                    #Size of the package
+        self.nb_pas_fini = size
         self.products = []                  #List of the products instances 
         self.ended = False                  #boolean to see if we already ended the package
         self.generate = False               #Alllow us to generate the command only once we need it
@@ -80,11 +83,14 @@ class package:
             int:    0   ==>     Product generated
                     1   ==>     Already generate but not ended
                     2   ==>     Alkready ended
+            
+        This function is used when we open for the first time the package or for the second time
         """
         if not self.ended and not self.generate:
             self.generate_product()
             return 0
         if self.generate and not self.ended:
+            self.check_not_ended_product()
             return 1
         if self.ended and not self.generate:
             return 2
@@ -95,13 +101,14 @@ class package:
         Returns:
             int: the number of products that aren't ended now 
         """
-        nb_pas_fini = 0
+        self.nb_pas_fini = 0
         for i in self.products:
             if not i.ended:
-                nb_pas_fini +=1 
-        return nb_pas_fini
-            
+                self.nb_pas_fini +=1
 
+    def one_product_scanned(self):
+        self.nb_pas_fini -=1
+        
     def check_len(self):
         """Check if the number of product is wrong or not
 
@@ -127,9 +134,9 @@ class package:
                 #new structure of self.products:
                 #       [instance of product, instance of product]
                 range+=1
-    
 
-class product:
+
+class product(package):
     
     def __init__(self,nbproduct :int,product_ref : int, ended : bool) -> None:
         self.nbproduct = nbproduct
@@ -142,6 +149,7 @@ class product:
     def scan(self):
         #When you scan a product
         self.is_ended =True
+        super().one_product_scanned()
 
     def search_product_ref(self,result):
         """Permet d'avoir des info supplémentaire sur le produit
@@ -153,3 +161,4 @@ class product:
         self.price = result[0]
         self.nom = result[1]
     
+Commande = commande(120,'alex',[[1234],[[12930,2],[124902,6]],2],2,False)
