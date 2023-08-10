@@ -56,7 +56,8 @@ class package:
         Args:
             nbpackage (int): The unique id of the package ( unique in the command)
             products (list): list of all the product in the specific package
-            size (int): _description_
+            size (int): number of product in the package
+            ended (bool): help us to see if the package is ended
         """
 
         #Structure of productlist:
@@ -66,9 +67,25 @@ class package:
         self.id_order = id_order
         self.productslist = products
         self.size = size
+        self.ended = False
+        self.generate = False
 
         if not self.check_len():
             raise(IndexError('Not enough packages (len(self.productslist) < self.size)'))
+
+    def scanned(self):
+        """To generate the 
+
+        Returns:
+            _type_: _description_
+        """
+        if not self.ended and not self.generate:
+            self.generate_product()
+            return 0
+        if self.generate and not self.ended:
+            return 1
+        if self.ended and not self.generate:
+            return 2
 
     def check_len(self):
         """Check if the number of product is wrong or not
