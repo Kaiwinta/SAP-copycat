@@ -57,27 +57,29 @@ class package:
             nbpackage (int): The unique id of the package ( unique in the command)
             products (list): list of all the product in the specific package
             size (int): number of product in the package
-            ended (bool): help us to see if the package is ended
         """
 
         #Structure of productlist:
         #[ [Product 1, quantity], [Product 2, quantity] ]
 
-        self.nbpackage = nbpackage
-        self.id_order = id_order
-        self.productslist = products
-        self.size = size
-        self.ended = False
-        self.generate = False
+        self.nbpackage = nbpackage          #Id of the package
+        self.id_order = id_order            #Id of the order that contain the package
+        self.product_ref_list = products    #List of all the ref of the product and the quantity
+        self.size = size                    #Size of the package
+        self.products = []                  #List of the products instances 
+        self.ended = False                  #boolean to see if we already ended the package
+        self.generate = False               #Alllow us to generate the command only once we need it
 
         if not self.check_len():
-            raise(IndexError('Not enough packages (len(self.productslist) < self.size)'))
+            raise(IndexError('Not enough packages (len(self.product_ref_list) < self.size)'))
 
     def scanned(self):
         """To generate the 
 
         Returns:
-            _type_: _description_
+            int:    0   ==>     Product generated
+                    1   ==>     Already generate but not ended
+                    2   ==>     Alkready ended
         """
         if not self.ended and not self.generate:
             self.generate_product()
@@ -86,6 +88,19 @@ class package:
             return 1
         if self.ended and not self.generate:
             return 2
+        
+    def check_not_ended_product(self):
+        """Count the number of product in a specific packages that aren't ended yet
+
+        Returns:
+            int: the number of products that aren't ended now 
+        """
+        nb_pas_fini = 0
+        for i in self.products:
+            if not i.ended:
+                nb_pas_fini +=1 
+        return nb_pas_fini
+            
 
     def check_len(self):
         """Check if the number of product is wrong or not
@@ -93,18 +108,24 @@ class package:
         Returns:
             bool : Return True if the size is good
         """
-        return self.size == len(self.productslist)
+        return self.size == len(self.product_ref_list)
     
     def generate_product(self):
         """
             Generate for all product in the product list and instance of a product class
+            The instance are stocked in self.product wich is a list of instance 
+
+            Range allow us to create unique id  of the product
         """
         range = 0
-        for i in self.productslist:
+        for i in self.product_ref_list:
             for y in range(i[1]):
                 #i[1] is the quantity of a product
                 #The neested loop allow us to add many product with the same ref
-                produit = product(range,i[0], False)
+                self.products.append( product(range,i[0], False))
+
+                #new structure of self.products:
+                #       [instance of product, instance of product]
                 range+=1
     
 
