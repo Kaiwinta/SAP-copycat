@@ -2,14 +2,13 @@ import db_to_class as dbtc
 
 class commande:
     
-    def __init__(self,nbcommand, client : str, Listcarton : list, Group: int, ended: bool) -> None:
+    def __init__(self,nbcommand, client : str, Listcarton : list, ended: bool) -> None:
         """Allow us to create an instance of the class commande
 
         Args:
             nbcommand (int): The id of the command, is unique and will be in a database
             client (str): The name of the client, allow us to track good client
             Listcarton (list): The list of all the packages that are in this command, allow us to have big command
-            Group (int): an int that allow us to separate th e command based on the country
             ended (bool): Just to chack if the command is ended
 
             #Listecarton muss be written like this:
@@ -18,10 +17,11 @@ class commande:
         self.listecarton = Listcarton
         self.nbcommand = nbcommand
         self.ended = ended
-        self.group = Group
         self.client = client
         self.carton_contained = []
         self.create_packages()
+        self.list_packages_left = Listcarton
+        
 
     #Listecarton muss be written like this:
     #[ [pack_id], [product1,p2,p3,...], [size] ] ,     [ [pack_id], [product1,p2,p3,...], [size] ]
@@ -30,7 +30,6 @@ class commande:
         """
             The goal is to check all the packages that weren't send
         """
-        self.list_packages_left = []
         for i in self.listecarton:
             if not i.ended:
                 self.list_packages_left.append(i)
@@ -144,6 +143,7 @@ class package:
 
 
 class product(package):
+    #We create a subclas in order to be able to use the scan properly
     
     def __init__(self,nbproduct :int,product_ref : int, ended : bool) -> None:
         self.nbproduct = nbproduct
@@ -168,6 +168,7 @@ class product(package):
         self.price = result[0]
         self.nom = result[1]
     
-Commande = commande(120,'alex',[    [1234,[[12930,2],[124902,6]],8] ],2,False)
-Commande.create_packages()
+Commande = commande(120,'alex',[    [1234,[[12930,2],[124902,6]],8] ],False)
+                    #id  name        pack     p1  q1   p2     q2 qtotal ended
+print(Commande.carton_contained[0].products[0].product_ref)
 print('eden')
