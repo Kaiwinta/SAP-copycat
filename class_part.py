@@ -20,7 +20,7 @@ class commande:
         self.ended = ended
         self.group = Group
         self.client = client
-
+        self.carton_contained = []
         self.create_packages()
 
     #Listecarton muss be written like this:
@@ -43,8 +43,8 @@ class commande:
             For all packages in listecarton, generate a package class instance
         """
         for i in self.listecarton:
-            carton = package(i[0],self.nbcommand, i[1], i[2])
-            carton.generate_product()
+            self.carton_contained.append(package(i[0],self.nbcommand, i[1], i[2]))
+            self.carton_contained[-1].generate_product()
 
   
 #Command ==> Many or a single packages 
