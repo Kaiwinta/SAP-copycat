@@ -32,7 +32,7 @@ class commande:
         """
         self.list_packages_left = []
         for i in self.listecarton:
-            if not i.ended():
+            if not i.ended:
                 self.list_packages_left.append(i)
 
         if len(self.list_packages_left) == 0:
@@ -76,6 +76,7 @@ class package:
         if not self.check_len():
             raise(IndexError('Not enough packages (len(self.product_ref_list) < self.size)'))
 
+
     def scanned(self):
         """To generate the 
 
@@ -115,7 +116,11 @@ class package:
         Returns:
             bool : Return True if the size is good
         """
-        return self.size == len(self.product_ref_list)
+        size = 0
+        for i in self.product_ref_list:
+            size +=i[1]
+
+        return self.size == size
     
     def generate_product(self):
         """
@@ -124,16 +129,18 @@ class package:
 
             Range allow us to create unique id  of the product
         """
-        range = 0
+        counter = 0
         for i in self.product_ref_list:
-            for y in range(i[1]):
+            print(i[1],'\t c est I')
+            
+            for y in range(0,i[1]):
                 #i[1] is the quantity of a product
                 #The neested loop allow us to add many product with the same ref
-                self.products.append( product(range,i[0], False))
+                self.products.append(  product(range,i[0], False))
 
                 #new structure of self.products:
                 #       [instance of product, instance of product]
-                range+=1
+                counter+=1
 
 
 class product(package):
@@ -143,8 +150,8 @@ class product(package):
         self.is_ended = ended
         self.product_ref = product_ref
 
-        request_result = dbtc.search_price(self.product_ref)
-        self.search_product_ref(request_result)
+        #request_result = dbtc.search_price(self.product_ref)
+        #self.search_product_ref(request_result)
 
     def scan(self):
         #When you scan a product
@@ -161,4 +168,6 @@ class product(package):
         self.price = result[0]
         self.nom = result[1]
     
-Commande = commande(120,'alex',[[1234],[[12930,2],[124902,6]],2],2,False)
+Commande = commande(120,'alex',[    [1234,[[12930,2],[124902,6]],8] ],2,False)
+Commande.create_packages()
+print('eden')
