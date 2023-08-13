@@ -70,7 +70,7 @@ class package:
         self.nb_pas_fini = size
         self.products = []                  #List of the products instances 
         self.ended = False                  #boolean to see if we already ended the package
-        self.generated = False               #Alllow us to generate the command only once we need it
+        self.generate = False               #Alllow us to generate the command only once we need it
 
         if not self.check_len():
             raise(IndexError('Not enough packages (len(self.product_ref_list) < self.size)'))
@@ -135,6 +135,7 @@ class package:
                 #i[1] is the quantity of a product
                 #The neested loop allow us to add many product with the same ref
                 self.products.append(  product(range,i[0], False))
+                self.products[-1].search_product_ref()
 
                 #new structure of self.products:
                 #       [instance of product, instance of product]
@@ -157,16 +158,21 @@ class product(package):
         self.is_ended =True
         super().one_product_scanned()
 
-    def search_product_ref(self,result):
+    def search_product_ref(self):
         """Permet d'avoir des info supplémentaire sur le produit
 
         Args:
             result (tuple): the tuple of the result of an sql request
         """
         #SQL request to search the product ref in ProductListed
-        self.price = result[0]
-        self.nom = result[1]
+        print(self.product_ref)
+        result = dbtc.search_price(self.product_ref)
+        self.price = result[0][0]
+        self.nom = result[0][1]
+        self.color = result[0][2]
     
-Commande = commande(120,'alex',[    [1234,[[12930,2],[124902,6]],8] ],False)
+Commande = commande(120,'alex',[    [1234,[[1,2],[2,6]],8] ],False)
                     #id  name        pack     p1  q1   p2     q2 qtotal ended
 Commande.carton_contained[-1].scanned()
+Commande.carton_contained[-1].products[0].search_product_ref()
+print('ended')
