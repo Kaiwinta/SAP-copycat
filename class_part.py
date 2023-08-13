@@ -43,7 +43,7 @@ class commande:
         """
         for i in self.listecarton:
             self.carton_contained.append(package(i[0],self.nbcommand, i[1], i[2]))
-            self.carton_contained[-1].generate_product()
+
 
   
 #Command ==> Many or a single packages 
@@ -70,7 +70,7 @@ class package:
         self.nb_pas_fini = size
         self.products = []                  #List of the products instances 
         self.ended = False                  #boolean to see if we already ended the package
-        self.generate = False               #Alllow us to generate the command only once we need it
+        self.generated = False               #Alllow us to generate the command only once we need it
 
         if not self.check_len():
             raise(IndexError('Not enough packages (len(self.product_ref_list) < self.size)'))
@@ -130,7 +130,6 @@ class package:
         """
         counter = 0
         for i in self.product_ref_list:
-            print(i[1],'\t c est I')
             
             for y in range(0,i[1]):
                 #i[1] is the quantity of a product
@@ -170,5 +169,4 @@ class product(package):
     
 Commande = commande(120,'alex',[    [1234,[[12930,2],[124902,6]],8] ],False)
                     #id  name        pack     p1  q1   p2     q2 qtotal ended
-print(Commande.carton_contained[0].products[0].product_ref)
-print('eden')
+Commande.carton_contained[-1].scanned()
