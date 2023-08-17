@@ -11,10 +11,27 @@ conn2 = sqlite3.connect('Command.db')
 d = conn2.cursor()
 
 def search_price(ref):
+    """Search the price annd some spec of the object
+
+    Args:
+        ref (int): the ref of a product in the database
+
+    Returns:
+        list: the list of price, product_name and color
+    """
     return c.execute(f"SELECT price,product_name,color FROM Productlisted WHERE ref_product =  {ref}").fetchall()
 
 def charging_package(order_ref):
+    """Is used when you scan a new order, find all the packages that are contained
+
+    Args:
+        order_ref (int): the ref of the order in the database
+
+    Returns:
+        list: the list of all the packages ref
+    """
     result = d.execute(f"SELECT * FROM Package WHERE id_command = {order_ref}").fetchall()
+    return result
 
 def charging_product(package_ref: int):
     """Permet de chercher toutes les ref de produit contenu dans un package
@@ -28,7 +45,6 @@ def charging_product(package_ref: int):
     result = d.execute(f"SELECT Product_ref, nombre FROM Product WHERE id_package = {package_ref}").fetchall()
     liste_product_ref = []
     for row in result:
-        print(row)
         #Pas sur de ça vu que la fonction de création utilise un tuple (produit, quantité)
         for line in range(row[1]):
             liste_product_ref.append(row[0])
