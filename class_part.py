@@ -1,4 +1,4 @@
-import db_to_class as dbtc
+import dbPart as dbtc
 
 class commande:
     
@@ -19,7 +19,7 @@ class commande:
         self.ended = ended
         self.client = client
         self.carton_contained = []
-        self.create_packages()
+        
         self.list_packages_left = Listcarton
         
 
@@ -51,7 +51,7 @@ class commande:
 
 class package:
     
-    def __init__(self,nbpackage: int,id_order : int, products: list, size : int) -> None:
+    def __init__(self,nbpackage: int,id_order : int, size : int) -> None:
         """Creating an instance of a package
 
         Args:
@@ -65,7 +65,7 @@ class package:
 
         self.nbpackage = nbpackage          #Id of the package
         self.id_order = id_order            #Id of the order that contain the package
-        self.product_ref_list = products    #List of all the ref of the product and the quantity
+        self.product_ref_list = []
         self.size = size                    #Size of the package
         self.nb_pas_fini = size
         self.products = []                  #List of the products instances 
@@ -116,6 +116,7 @@ class package:
             bool : Return True if the size is good
         """
         size = 0
+        print(self.product_ref_list)
         for i in self.product_ref_list:
             size +=i[1]
 
@@ -128,6 +129,7 @@ class package:
 
             Range allow us to create unique id  of the product
         """
+        self.product_ref_list = dbtc.charging_product(self.nbpackage)
         counter = 0
         for i in self.product_ref_list:
             
@@ -171,8 +173,8 @@ class product(package):
         self.nom = result[0][1]
         self.color = result[0][2]
     
-Commande = commande(120,'alex',[    [1234,[[1,2],[2,6]],8] ],False)
+"""Commande = commande(120,'alex',[    [1234,[[1,2],[2,6]],8] ],False)
                     #id  name        pack     p1  q1   p2     q2 qtotal ended
 Commande.carton_contained[-1].scanned()
 Commande.carton_contained[-1].products[0].search_product_ref()
-print('ended')
+print('ended')"""
