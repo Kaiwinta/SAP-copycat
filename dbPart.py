@@ -56,4 +56,7 @@ def creating_package(order_ref : int):
     
 result = search_price(2)
 print(charging_product(2))
+
 creating_package(1)
+conn2.close()
+conn.close()
