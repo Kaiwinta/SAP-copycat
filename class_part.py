@@ -172,6 +172,8 @@ class product(package):
         self.price = result[0][0]
         self.nom = result[0][1]
         self.color = result[0][2]
+
+    
     
 """Commande = commande(120,'alex',[    [1234,[[1,2],[2,6]],8] ],False)
                     #id  name        pack     p1  q1   p2     q2 qtotal ended
