@@ -1,5 +1,5 @@
 from random import randint,shuffle
-
+import sqlite3
 def generate_order():
     liste = list(range(1,301))
 
@@ -26,5 +26,25 @@ def generate_false():
     for i in range(600):
         print(False)
 
-generate_false()
 
+def listing():
+    liste_commande_id = c.execute("SELECT id_command, size FROM Package").fetchall()
+    
+    return liste_commande_id
+
+def creating_product(lsite_id):
+    for i in range(len(lsite_id)):
+        
+        for y in range(lsite_id[i][1]):
+           
+            c.execute(f"INSERT INTO Product (Product_ref,id_package) VALUES ({randint(1,50)},{lsite_id[i][0]})")
+            
+            print('fait')
+    
+conn = sqlite3.connect('Command.db')
+c = conn.cursor()
+
+liste = listing()
+creating_product(liste)
+conn.commit()
+conn.close()
