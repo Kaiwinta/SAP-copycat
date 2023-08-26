@@ -19,9 +19,7 @@ class commande:
         self.ended = ended
         self.client = client
         self.carton_contained = []
-        
         self.list_packages_left = Listcarton
-        
 
     #Listecarton muss be written like this:
     #[ [pack_id], [product1,p2,p3,...], [size] ] ,     [ [pack_id], [product1,p2,p3,...], [size] ]
